@@ -50,5 +50,5 @@ jobs:
             sudo chmod 666 /var/run/docker.sock
             sudo docker rm -f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/vote
-            docker-compose -f docker-compose.yaml --env-file ./.env up -d
+            docker-compose -f docker-compose.yml --env-file ./.env up -d
             docker image prune -f
