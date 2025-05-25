@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   deploy:
-    if: github.repository == 'Team-Promesa/spring-vote-21st'  
+    if: github.repository == 'Team-Promesa/spring-vote-21st'
     runs-on: ubuntu-latest
 
     steps:
@@ -45,10 +45,20 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             cd /home/ubuntu/
+
+            # .env 파일 생성
             echo "${{ secrets.ENV_VARS }}" | sudo tee .env > /dev/null
-            echo "${{ vars.DOCKER_COMPOSE }}" | sudo tee docker-compose.yml > /dev/null
+
+            # DOCKER_COMPOSE 멀티라인 YAML 줄바꿈 보존 방식으로 생성
+            cat <<EOF | sudo tee docker-compose.yml > /dev/null
+${{ vars.DOCKER_COMPOSE }}
+EOF
+
+            # 도커 권한 및 이미지 정리
             sudo chmod 666 /var/run/docker.sock
-            sudo docker rm -f $(docker ps -qa)
+            sudo docker rm -f $(docker ps -qa) || true
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/vote
-            docker-compose -f docker-compose.yml --env-file ./.env up -d
-            docker image prune -f
+
+            # 컨테이너 실행 및 확인
+            sudo docker-compose -f docker-compose.yml --env-file .env up -d || exit 1
+            sudo docker ps -a
