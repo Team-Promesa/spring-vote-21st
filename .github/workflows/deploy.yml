@@ -50,7 +50,7 @@ jobs:
             echo "${{ secrets.ENV_VARS }}" | sudo tee .env > /dev/null
 
             # DOCKER_COMPOSE 멀티라인 YAML 줄바꿈 보존 방식으로 생성
-            cat <<EOF | sudo tee docker-compose.yml > /dev/null
+            cat <<'EOF' | sudo tee docker-compose.yml > /dev/null
 ${{ vars.DOCKER_COMPOSE }}
 EOF
 
