@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   deploy:
-    if: github.repository == 'Team-Promesa/spring-vote-21st'
+    if: github.repository == 'Team-Promesa/spring-vote-21st'  
     runs-on: ubuntu-latest
 
     steps:
@@ -45,26 +45,10 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             cd /home/ubuntu/
-
-            # .env 파일 생성
             echo "${{ secrets.ENV_VARS }}" | sudo tee .env > /dev/null
-
-            # docker-compose.yml 생성 (줄바꿈 보존)
-            cat <<EOF | sudo tee docker-compose.yml > /dev/null
-${{ vars.DOCKER_COMPOSE }}
-EOF
-
-            # 도커 권한 설정
+            echo "${{ vars.DOCKER_COMPOSE }}" | sudo tee docker-compose.yml > /dev/null
             sudo chmod 666 /var/run/docker.sock
-
-            # 기존 컨테이너 제거
             sudo docker rm -f $(docker ps -qa)
-
-            # 최신 이미지 pull
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/vote
-
-            # docker-compose로 실행
             docker-compose -f docker-compose.yml --env-file ./.env up -d
-
-            # 안 쓰는 이미지 정리
             docker image prune -f
