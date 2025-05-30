@@ -1,6 +1,5 @@
 package com.ceos21.vote.common.config;
 
-import com.ceos21.vote.common.application.OAuth2Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,8 +12,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final OAuth2Service oAuth2Service;
-
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         return http.csrf().disable() // csrf 보안 설정 사용 X
@@ -24,15 +21,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/login", "/signup").permitAll()
                         .requestMatchers("/oauth/loginInfo").authenticated()
+
+                        .requestMatchers("/",
+                                "/index.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
 
-                .oauth2Login(oauth2 -> oauth2
-                        .defaultSuccessUrl("/oauth/loginInfo", true)
-                        .userInfoEndpoint(userInfo -> userInfo
-                                .userService(oAuth2Service)
-                        )
-                )
                 .build();
     }
 }
