@@ -36,6 +36,7 @@ public class Member extends BaseTimeEntity {
     @NotBlank
     private String password;
 
-    private boolean isPartLeaderVoted;
+    private boolean isBELeaderVoted;
+    private boolean isFELeaderVoted;
     private boolean isDemoDayVoted;
 }
