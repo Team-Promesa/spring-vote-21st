@@ -1,27 +1,47 @@
 package com.ceos21.vote.domain.member.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.ceos21.vote.common.domain.BaseTimeEntity;
+import com.ceos21.vote.common.security.UserRole;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+@Builder
+@AllArgsConstructor
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
-public class Member {
+public class Member extends BaseTimeEntity {
     @Id @GeneratedValue
-    @Column(name = "user_id")
+    @Column(name = "member_id")
     private Long id;
 
-    private String name;    // 로그인한 사용자 이름
+    @NotBlank
+    private String name;
 
-    private String provider;    // 사용자가 로그인한 서비스 (ex.google, kakao, naver)
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private PartType part;
 
-    public Member updateMember(String name){
-        this.name = name;
-        return this;
-    }
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private TeamType team;
+
+    @NotBlank
+    private String email;
+
+    @NotBlank
+    private String identifier;
+
+    @NotBlank
+    private String password;
+
+    private boolean isBELeaderVoted = false;
+    private boolean isFELeaderVoted = false;
+    private boolean isDemoDayVoted = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role;
 }

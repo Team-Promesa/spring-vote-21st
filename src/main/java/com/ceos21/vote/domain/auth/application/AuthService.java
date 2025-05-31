@@ -1,0 +1,33 @@
+package com.ceos21.vote.domain.auth.application;
+
+import com.ceos21.vote.common.jwt.JwtUtil;
+import com.ceos21.vote.common.jwt.RefreshTokenRepository;
+import com.ceos21.vote.domain.auth.dto.SignupRequest;
+import com.ceos21.vote.domain.auth.exception.DuplicateEmailException;
+import com.ceos21.vote.domain.member.dao.MemberRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class AuthService {
+
+    private final MemberRepository memberRepository;
+    private final JwtUtil jwtUtil;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public void register(SignupRequest request) {
+        // 중복 아이디 검사
+        if (memberRepository.findByIdentifier(request.identifier).isPresent()) {
+            throw DuplicateEmailException.EXCEPTION;
+        }
+
+        // 중복 이메일 검사
+        if (memberRepository.findByEmail(request.email).isPresent()) {
+            throw DuplicateEmailException.EXCEPTION;
+        }
+        memberRepository.save(request.toEntity(passwordEncoder));
+    }
+}
