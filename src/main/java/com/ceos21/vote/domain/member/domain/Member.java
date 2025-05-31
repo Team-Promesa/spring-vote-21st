@@ -1,13 +1,14 @@
 package com.ceos21.vote.domain.member.domain;
 
 import com.ceos21.vote.common.domain.BaseTimeEntity;
+import com.ceos21.vote.common.security.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@Builder
+@AllArgsConstructor
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -36,7 +37,11 @@ public class Member extends BaseTimeEntity {
     @NotBlank
     private String password;
 
-    private boolean isBELeaderVoted;
-    private boolean isFELeaderVoted;
-    private boolean isDemoDayVoted;
+    private boolean isBELeaderVoted = false;
+    private boolean isFELeaderVoted = false;
+    private boolean isDemoDayVoted = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role;
 }
