@@ -17,9 +17,13 @@ import java.util.List;
 @Slf4j
 @Component
 public class JwtUtil {
+    @Value("${jwt.access-expiration-ms}")
+    private long accessExpirationTime;
 
+    @Value("${jwt.refresh-expiration-ms}")
+    private long refreshExpirationTime;
 
-    @Value("${jwt.secret-key}") // application.yml에 선언한 환경 변수
+    @Value("${jwt.secret-key}")
     private String secretKey;
     private Key key;
 
@@ -27,8 +31,6 @@ public class JwtUtil {
     public static final String AUTHORIZATION_KEY = "auth";  // 사용자 권한 값의 KEY
     public static final String BEARER_PREFIX = "Bearer ";  // 토큰 식별자
     private static final int BEARER_PREFIX_LENGTH = 7;
-    private final long ACCESS_EXPIRATION_TIME = 1000 * 60 * 10L;  // Access Token 만료시간 : 10분
-    private final long REFRESH_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 7L;  // Refresh Token 만료시간 : 7일
 
     @PostConstruct
     public void init() {
@@ -40,7 +42,7 @@ public class JwtUtil {
                 .setSubject(identifier)
                 .claim(AUTHORIZATION_KEY, roles)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_EXPIRATION_TIME))
+                .setExpiration(new Date(System.currentTimeMillis() + accessExpirationTime))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
@@ -49,7 +51,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .setSubject(identifier)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + REFRESH_EXPIRATION_TIME))
+                .setExpiration(new Date(System.currentTimeMillis() + refreshExpirationTime))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }

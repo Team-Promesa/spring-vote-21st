@@ -14,3 +14,5 @@ server:
 
 jwt:
   secretKey: ${JWT_SECRET_KEY}
+  access-expiration-ms: ${JWT_ACCESS_EXPIRATION_MS}
+  refresh-expiration-ms: ${JWT_REFRESH_EXPIRATION_MS}
