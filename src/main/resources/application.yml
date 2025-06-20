@@ -2,7 +2,7 @@ spring:
   config:
     import: optional:file:.env[.properties]
   profiles:
-    active : docker # 기본값: 로컬 개발 (운영에서는 prod로 override)
+    active : local # 기본값: 로컬 개발 (운영에서는 prod로 override)
 
 logging:
   level:
