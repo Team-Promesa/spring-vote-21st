@@ -2,7 +2,7 @@ spring:
   config:
     import: optional:file:.env[.properties]
   profiles:
-    active: prod # 기본값: 로컬 개발 (운영에서는 prod로 override)
+    active : local # 기본값: 로컬 개발 (운영에서는 prod로 override)
 
 logging:
   level:
@@ -11,3 +11,8 @@ logging:
 
 server:
   port: 8082
+
+jwt:
+  secretKey: ${JWT_SECRET_KEY}
+  access-expiration-ms: ${JWT_ACCESS_EXPIRATION_MS}
+  refresh-expiration-ms: ${JWT_REFRESH_EXPIRATION_MS}
