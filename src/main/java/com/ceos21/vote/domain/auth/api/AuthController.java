@@ -7,6 +7,7 @@ import com.ceos21.vote.domain.auth.dto.LoginRequest;
 import com.ceos21.vote.domain.auth.dto.RefreshResponse;
 import com.ceos21.vote.domain.auth.dto.SignupRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -40,10 +41,25 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
+    @Operation(
+            description = "액세스 토큰을 재발급합니다."
+    )
     public ResponseEntity<RefreshResponse> refresh(
         @RequestHeader("Refresh-Token") String refreshToken
     ) {
         String accessToken = authService.reissue(refreshToken);
         return ResponseEntity.ok(new RefreshResponse(accessToken));
+    }
+
+    @Operation(
+            summary = "로그아웃",
+            description = "로그아웃합니다."
+    )
+    @PostMapping("/logout")
+    public ResponseEntity<Void> refresh(HttpServletRequest request) {
+        String token = jwtUtil.getJwtFromHeader(request);   // "Authorization" 헤더에서 access token 추출
+        authService.logout(token);
+
+        return  ResponseEntity.ok().build();
     }
 }
