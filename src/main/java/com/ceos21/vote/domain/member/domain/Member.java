@@ -13,7 +13,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
 
@@ -37,8 +37,8 @@ public class Member extends BaseTimeEntity {
     @NotBlank
     private String password;
 
-    private boolean isBELeaderVoted = false;
-    private boolean isFELeaderVoted = false;
+    private boolean isBeLeaderVoted = false;
+    private boolean isFeLeaderVoted = false;
     private boolean isDemoDayVoted = false;
 
     @Enumerated(EnumType.STRING)
