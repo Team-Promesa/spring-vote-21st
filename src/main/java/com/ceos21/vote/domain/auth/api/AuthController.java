@@ -4,6 +4,7 @@ import com.ceos21.vote.common.jwt.JwtUtil;
 import com.ceos21.vote.common.jwt.RefreshTokenRepository;
 import com.ceos21.vote.domain.auth.application.AuthService;
 import com.ceos21.vote.domain.auth.dto.LoginRequest;
+import com.ceos21.vote.domain.auth.dto.RefreshResponse;
 import com.ceos21.vote.domain.auth.dto.SignupRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -36,5 +37,13 @@ public class AuthController {
     )
     @PostMapping("/login")
     public void signin(@Valid @RequestBody LoginRequest request) {
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<RefreshResponse> refresh(
+        @RequestHeader("Refresh-Token") String refreshToken
+    ) {
+        String accessToken = authService.reissue(refreshToken);
+        return ResponseEntity.ok(new RefreshResponse(accessToken));
     }
 }

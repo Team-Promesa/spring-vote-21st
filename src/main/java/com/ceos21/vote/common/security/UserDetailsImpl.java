@@ -39,7 +39,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getEmail(); // 로그인 ID로 email 사용
+        return user.getIdentifier(); // 로그인 ID로 identifier 사용
     }
 
     public UserRole getRole() {

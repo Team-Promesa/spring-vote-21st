@@ -3,6 +3,7 @@ package com.ceos21.vote.common.exception;
 import com.ceos21.vote.common.dto.ErrorReason;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 import static com.ceos21.vote.common.consts.VoteStatic.*;
 
@@ -15,6 +16,8 @@ public enum GlobalErrorCode implements BaseErrorCode {
     EXPIRED_TOKEN(UNAUTHORIZED, "AUTH_401", "JWT 토큰이 만료되었습니다."),
     UNSUPRORTED_TOKEN(UNAUTHORIZED, "AUTH_401", "지원하지 않는 JWT 토큰입니다."),
     INVALID_TOKEN(UNAUTHORIZED, "AUTH_401", "잘못된 JWT 토큰입니다."),
+    INVALID_REFRESH_TOKEN(UNAUTHORIZED, "AUTH_401", "잘못된 리프레쉬 토큰입니다."),
+    RESOURCE_NOT_FOUND(NOT_FOUND, "AUTH_404", "Resource not exists"),
 
     INTERNAL_SERVER_ERROR(INTERNAL_SERVER, "GLOBAL_500", "서버 오류");
 

@@ -60,15 +60,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         SecurityContextHolder.getContext().setAuthentication(authResult);   // 인증 정보 저장
 
-        String email = authResult.getName();
+        String identifier = authResult.getName();
         List<String> roles = authResult.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        String accessToken = jwtUtil.createAccessToken(email, roles);
-        String refreshToken = jwtUtil.createRefreshToken(email);
+        String accessToken = jwtUtil.createAccessToken(identifier, roles);
+        String refreshToken = jwtUtil.createRefreshToken(identifier);
 
-        refreshTokenRepository.save(email, refreshToken);
+        refreshTokenRepository.save(identifier, refreshToken);
 
         Map<String, String> tokenMap = Map.of(
                 "accessToken", accessToken,

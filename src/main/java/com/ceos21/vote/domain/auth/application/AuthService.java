@@ -1,13 +1,19 @@
 package com.ceos21.vote.domain.auth.application;
 
+import com.ceos21.vote.common.exception.InvalidRefreshTokenException;
+import com.ceos21.vote.common.exception.ResourceNotFoundException;
 import com.ceos21.vote.common.jwt.JwtUtil;
 import com.ceos21.vote.common.jwt.RefreshTokenRepository;
+import com.ceos21.vote.common.security.UserRole;
 import com.ceos21.vote.domain.auth.dto.SignupRequest;
 import com.ceos21.vote.domain.auth.exception.DuplicateEmailException;
 import com.ceos21.vote.domain.member.dao.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,5 +35,23 @@ public class AuthService {
             throw DuplicateEmailException.EXCEPTION;
         }
         memberRepository.save(request.toEntity(passwordEncoder));
+    }
+
+    @Transactional
+    public String reissue(String refreshToken) {
+        jwtUtil.validateToken(refreshToken);
+
+        String identifier = jwtUtil.getUserInfoFromToken(refreshToken).getSubject();
+        String saved = refreshTokenRepository.get(identifier);
+
+        if (saved == null) {
+            throw ResourceNotFoundException.EXCEPTION;
+        }
+
+        if (!saved.equals(refreshToken)) {
+            throw InvalidRefreshTokenException.EXCEPTION;
+        }
+
+        return jwtUtil.createAccessToken(identifier, List.of(UserRole.USER.getAuthority()));
     }
 }
