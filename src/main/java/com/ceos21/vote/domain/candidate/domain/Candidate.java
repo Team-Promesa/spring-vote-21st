@@ -1,6 +1,7 @@
 package com.ceos21.vote.domain.candidate.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,6 +15,9 @@ public class Candidate {
     @Column(name = "candidate_id")
     private Long id;
 
+    @NotBlank
+    private String name;
+
     @Column(name = "vote_count")
     private int voteCount;
 
@@ -21,4 +25,8 @@ public class Candidate {
     @Enumerated(EnumType.STRING)
     @Column(name = "vote_type")
     private VoteType voteType;
+
+    public void addVote() {
+        this.voteCount += 1;
+    }
 }
