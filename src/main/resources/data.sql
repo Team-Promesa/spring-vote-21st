@@ -27,8 +27,8 @@ INSERT INTO candidate (name, vote_count, vote_type) VALUES ('최근호', 0, 'BE_
 INSERT INTO candidate (name, vote_count, vote_type) VALUES ('임도현', 0, 'BE_LEADER');
 
 -- DEMO_DAY 후보들
-INSERT INTO candidate (name, vote_count, vote_type) VALUES ('이어드림', 0, 'DEMO_DAY');
-INSERT INTO candidate (name, vote_count, vote_type) VALUES ('인플루이', 0, 'DEMO_DAY');
-INSERT INTO candidate (name, vote_count, vote_type) VALUES ('팝업사이클', 0, 'DEMO_DAY');
-INSERT INTO candidate (name, vote_count, vote_type) VALUES ('프로메사', 0, 'DEMO_DAY');
-INSERT INTO candidate (name, vote_count, vote_type) VALUES ('하니홈', 0, 'DEMO_DAY');
+INSERT INTO candidate (name, vote_count, vote_type) VALUES ('DEARDREAM', 0, 'DEMO_DAY');
+INSERT INTO candidate (name, vote_count, vote_type) VALUES ('INFLUY', 0, 'DEMO_DAY');
+INSERT INTO candidate (name, vote_count, vote_type) VALUES ('LOOPZ', 0, 'DEMO_DAY');
+INSERT INTO candidate (name, vote_count, vote_type) VALUES ('PROMESA', 0, 'DEMO_DAY');
+INSERT INTO candidate (name, vote_count, vote_type) VALUES ('HANIHOME', 0, 'DEMO_DAY');
