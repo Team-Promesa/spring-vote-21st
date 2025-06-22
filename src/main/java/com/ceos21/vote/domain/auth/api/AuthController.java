@@ -2,15 +2,19 @@ package com.ceos21.vote.domain.auth.api;
 
 import com.ceos21.vote.common.jwt.JwtUtil;
 import com.ceos21.vote.common.jwt.RefreshTokenRepository;
+import com.ceos21.vote.common.security.UserDetailsImpl;
 import com.ceos21.vote.domain.auth.application.AuthService;
 import com.ceos21.vote.domain.auth.dto.LoginRequest;
 import com.ceos21.vote.domain.auth.dto.RefreshResponse;
 import com.ceos21.vote.domain.auth.dto.SignupRequest;
+import com.ceos21.vote.domain.auth.dto.UserInfoResponse;
+import com.ceos21.vote.domain.member.domain.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -45,5 +49,15 @@ public class AuthController {
     ) {
         String accessToken = authService.reissue(refreshToken);
         return ResponseEntity.ok(new RefreshResponse(accessToken));
+    }
+
+    @GetMapping("/me")
+    public UserInfoResponse getCurrentUserInfo(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        String accessToken = authHeader.replace("Bearer ", "");
+        Member member = userDetails.getUser();
+        return UserInfoResponse.from(member, accessToken);
     }
 }
