@@ -54,4 +54,12 @@ public class AuthService {
 
         return jwtUtil.createAccessToken(identifier, List.of(UserRole.USER.getAuthority()));
     }
+
+    @Transactional
+    public void logout(String refreshToken) {
+        jwtUtil.validateToken(refreshToken);   // 만료되었으면 예외 던짐
+
+        String identifier = jwtUtil.getUserInfoFromToken(refreshToken).getSubject();
+        refreshTokenRepository.delete(identifier);   // 리프레시 토큰 삭제
+    }
 }
