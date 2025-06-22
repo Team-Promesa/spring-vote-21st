@@ -68,12 +68,12 @@ public class AuthController {
     }
   
     @GetMapping("/me")
-    public UserInfoResponse getCurrentUserInfo(
+    public ResponseEntity<UserInfoResponse> getCurrentUserInfo(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestHeader("Authorization") String authHeader
     ) {
         String accessToken = authHeader.replace("Bearer ", "");
         Member member = userDetails.getUser();
-        return UserInfoResponse.from(member, accessToken);
+        return ResponseEntity.ok(UserInfoResponse.from(member, accessToken));
     }
 }
